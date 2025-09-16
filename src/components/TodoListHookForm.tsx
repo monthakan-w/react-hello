@@ -22,12 +22,12 @@ export default function TodoApp() {
   resolver: zodResolver(TaskSchema),
   defaultValues: { title: "", type: "", dueDate: "" },
 });
- 
+    const [tasks, setTasks] = useState<Task[]>([]);
 
 
     const onAdd = (data: Task) => { 
         if (!data.title.trim()) return; 
-        setTasks((prev) => [...prev, data]); 
+        setTasks((prev: Task[]) => [...prev, data]);
 
         // setTasks คือฟังก์ชันที่ได้จาก useState สำหรับอัปเดตค่าใน state tasks 
         // (prev) => [...prev, data] คือ callback function, prev คือค่าเก่า (state เดิมของ tasks) 
@@ -75,15 +75,15 @@ export default function TodoApp() {
 
                 <button type="submit">Add</button> 
             </form> 
-            <ul> 
-                {tasks.map((t, idx) => ( 
+           <ul> 
+                {tasks.map((t: Task, idx: number) => ( 
                     <li key={idx}> 
-                        {t.title} 
-                        {t.type && ` | ประเภท: ${t.type}`} 
-                        {t.dueDate && ` | ส่ง: ${t.dueDate}`} 
+                    {t.title} 
+                    {t.type && ` | ประเภท: ${t.type}`} 
+                    {t.dueDate && ` | ส่ง: ${t.dueDate}`} 
                     </li> 
                 ))} 
-            </ul> 
+            </ul>
         </div> 
     ); 
 }
