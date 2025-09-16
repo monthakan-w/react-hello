@@ -7,28 +7,43 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 
 // 1) Zod schema 
-const TaskSchema = z.object({
-  title: z.string().trim().min(1, "กรุณากรอกชื่องาน"),
-  type: z.union([z.enum(["เรียน", "ทำงาน", "บ้าน", "อื่นๆ"]), z.literal("")]),
-  dueDate: z.union([
-    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "รูปแบบวันที่ไม่ถูกต้อง (YYYY-MM-DD)"),
-    z.literal(""),
-  ]),
-});
+const TaskSchema = z.object({ 
+    title: z.string().trim().min(1, "กรุณากรอกชื่องาน"), 
 
+    // อนุญาตให้เว้นว่าง หรือเลือกค่าจากรายการ 
+    type: z 
+        .enum(["เรียน", "ทำงาน", "บ้าน", "อื่นๆ"]) 
+        .optional() 
+        .or(z.literal("")), 
 
-type Task = z.infer<typeof TaskSchema>;
+    // input type="date" จะได้รูปแบบ YYYY-MM-DD 
+    dueDate: z 
+        .string() 
+        .regex(/^\d{4}-\d{2}-\d{2}$/, "รูปแบบวันที่ไม่ถูกต้อง (YYYY-MM-DD)") 
+        .optional() 
+        .or(z.literal("")), 
+}); 
+
+type Task = { 
+    title: string; 
+    type: string; 
+    dueDate: string; 
+}; 
 
  
 
 export default function TodoApp() { 
     const [tasks, setTasks] = useState<Task[]>([]); 
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<Task>({
-  resolver: zodResolver(TaskSchema),
-  defaultValues: { title: "", type: undefined, dueDate: undefined },
-});
-
+    const { 
+        register, 
+        handleSubmit, 
+        reset, 
+        formState: { errors }, 
+    } = useForm<Task>({ 
+        resolver: zodResolver(TaskSchema), 
+        defaultValues: { title: "", type: "", dueDate: "" }, 
+    }); 
 
 
     const onAdd = (data: Task) => { 
