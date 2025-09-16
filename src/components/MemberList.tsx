@@ -5,7 +5,7 @@
           <MemberList members={List_MEMBERS} group="SajaBoys"/>
           */}
 
-import React from 'react';
+
 
 
   type Member = { 
